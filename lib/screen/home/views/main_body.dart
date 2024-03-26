@@ -1,5 +1,8 @@
+// ignore_for_file: unnecessary_const
+
 import 'dart:math';
 
+import 'package:expense_tracker/data/data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -70,7 +73,7 @@ class MainBody extends StatelessWidget {
               height: 20,
             ),
             Container(
-              height: MediaQuery.of(context).size.height / 3.3,
+              height: MediaQuery.of(context).size.height / 4,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
@@ -86,14 +89,16 @@ class MainBody extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                   Text(
+                  Text(
                     "Total Balance",
                     style: TextStyle(
                         fontSize: 20,
                         color: Colors.grey.shade200,
                         fontWeight: FontWeight.bold),
                   ),
-                 const SizedBox(height: 12,),
+                  const SizedBox(
+                    height: 12,
+                  ),
                   const Text(
                     "₹ 4800.00",
                     style: TextStyle(
@@ -122,8 +127,8 @@ class MainBody extends StatelessWidget {
                                 color: Colors.greenAccent,
                               ),
                             ),
-                             Padding(
-                              padding:const EdgeInsets.all(8.0),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -149,7 +154,9 @@ class MainBody extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(width: 80,),
+                      const SizedBox(
+                        width: 80,
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Row(
@@ -166,7 +173,7 @@ class MainBody extends StatelessWidget {
                                 color: Colors.greenAccent,
                               ),
                             ),
-                             Padding(
+                            Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -196,6 +203,105 @@ class MainBody extends StatelessWidget {
                     ],
                   )
                 ],
+              ),
+            ),
+            const SizedBox(height: 25),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Transactions',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+                Text(
+                  'View all',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Theme.of(context).colorScheme.outline),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: dataModel.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Container(
+                                      height: 60,
+                                      width: 60,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color:dataModel[index]['color'],
+                                      ),
+                                    ),
+                                     Icon(
+                                      dataModel[index]['icon'],
+                                      size: 30,
+                                      color: Colors.white,
+                                    )
+                                  ],
+                                ),
+                              ),
+                               Text(
+                                dataModel[index]['title'],
+                                style:const TextStyle(
+                                    fontWeight: FontWeight.w700, fontSize: 20),
+                              )
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                 Text(
+                                  dataModel[index]['money'],
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text(
+                                  dataModel[index]['day'],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17,
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
             )
           ],
