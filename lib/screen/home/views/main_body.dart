@@ -230,6 +230,7 @@ class MainBody extends StatelessWidget {
             ),
             Expanded(
               child: ListView.builder(
+                physics: BouncingScrollPhysics(),
                 itemCount: dataModel.length,
                 itemBuilder: (context, index) {
                   return Padding(
