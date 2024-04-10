@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
@@ -22,6 +23,8 @@ class _AddExpensesState extends State<AddExpenses> {
     FontAwesomeIcons.mobile,
     FontAwesomeIcons.wallet
   ];
+
+  IconData? iconChoose;
 
   DateTime selectedDate = DateTime.now();
   @override
@@ -83,9 +86,15 @@ class _AddExpensesState extends State<AddExpenses> {
               TextField(
                 controller: categoryController,
                 onTap: () {
+                  setState(() {
+                    FocusScope.of(context).unfocus();
+                  });
+                  FocusScope.of(context).unfocus();
                   showDialog(
                       context: context,
                       builder: (ctx) {
+                        //initailize here because we do not it ouside we need it inside the dialogbox
+                        Color categoryColor = Colors.white;
                         bool showContainer = false;
                         return StatefulBuilder(builder: (context, setState) {
                           return AlertDialog(
@@ -96,6 +105,7 @@ class _AddExpensesState extends State<AddExpenses> {
                                 children: [
                                   TextField(
                                     cursorWidth: 2,
+                                    onTap: () {},
                                     decoration: InputDecoration(
                                       fillColor: Colors.white,
                                       filled: true,
@@ -130,8 +140,9 @@ class _AddExpensesState extends State<AddExpenses> {
                                       filled: true,
                                       hintText: "Icon",
                                       hintStyle: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.normal),
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.normal,
+                                      ),
                                       hoverColor: Colors.blue,
                                       prefixIcon: Icon(
                                         FontAwesomeIcons.icons,
@@ -141,6 +152,7 @@ class _AddExpensesState extends State<AddExpenses> {
                                         onPressed: () {
                                           setState(() {
                                             showContainer = !showContainer;
+                                            FocusScope.of(context).unfocus();
                                           });
                                         },
                                         icon: const Icon(
@@ -164,8 +176,9 @@ class _AddExpensesState extends State<AddExpenses> {
                                   ),
                                   showContainer
                                       ? Container(
-                                          width: MediaQuery.of(context).size.width,
-                                          height: 240,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height: 150,
                                           decoration: const BoxDecoration(
                                             color: Colors.white,
                                             borderRadius: BorderRadius.vertical(
@@ -181,17 +194,34 @@ class _AddExpensesState extends State<AddExpenses> {
                                             itemCount: expenseIcon.length,
                                             itemBuilder: (context, index) {
                                               return Padding(
-                                                padding: const EdgeInsets.all(4.0),
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                    
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    setState(
+                                                      () {
+                                                        iconChoose =
+                                                            expenseIcon[index];
+                                                      },
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          color: iconChoose ==
+                                                                  expenseIcon[
+                                                                      index]
+                                                              ? Colors.green
+                                                              : Colors.black,
+                                                          width: 2),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12),
                                                     ),
-                                                    borderRadius: BorderRadius.circular(12)
-                                                  ),
-                                                  child: Icon(
-                                                    expenseIcon[index],
-                                                    size:40,
+                                                    child: Icon(
+                                                      expenseIcon[index],
+                                                      size: 40,
+                                                    ),
                                                   ),
                                                 ),
                                               );
@@ -203,10 +233,59 @@ class _AddExpensesState extends State<AddExpenses> {
                                     height: 15,
                                   ),
                                   TextField(
+                                    onTap: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (ctx2) {
+                                            return AlertDialog(
+                                              content: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  ColorPicker(
+                                                      pickerColor:
+                                                          categoryColor,
+                                                      onColorChanged: (value) {
+                                                        setState(() {
+                                                          categoryColor = value;
+                                                        });
+                                                      }),
+                                                  SizedBox(
+                                                    height: kToolbarHeight,
+                                                    width: double.infinity,
+                                                    child: TextButton(
+                                                      onPressed: () {
+                                                        print(categoryColor);
+                                                        Navigator.pop(ctx2);
+                                                      },
+                                                      style:
+                                                          TextButton.styleFrom(
+                                                        backgroundColor:
+                                                            Colors.black,
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(12),
+                                                        ),
+                                                      ),
+                                                      child: const Text(
+                                                        "Save",
+                                                        style: TextStyle(
+                                                          fontSize: 22,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          });
+                                    },
                                     cursorWidth: 5,
                                     showCursor: false,
+                                    readOnly: true,
                                     decoration: InputDecoration(
-                                      fillColor: Colors.white,
+                                      fillColor: categoryColor,
                                       filled: true,
                                       hintText: "Color",
                                       hintStyle: const TextStyle(
@@ -228,6 +307,29 @@ class _AddExpensesState extends State<AddExpenses> {
                                       ),
                                     ),
                                   ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  SizedBox(
+                                    height: kToolbarHeight,
+                                    width: double.infinity,
+                                    child: TextButton(
+                                      onPressed: () {},
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: Colors.black,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        "Save",
+                                        style: TextStyle(
+                                          fontSize: 22,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -242,7 +344,9 @@ class _AddExpensesState extends State<AddExpenses> {
                   filled: true,
                   hintText: "category",
                   hintStyle: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.normal),
+                    fontSize: 20,
+                    fontWeight: FontWeight.normal,
+                  ),
                   hoverColor: Colors.blue,
                   prefixIcon: Icon(
                     FontAwesomeIcons.bars,

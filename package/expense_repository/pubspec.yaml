@@ -1,4 +1,4 @@
-name: expense_tracker
+name: expense_repository
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -28,23 +28,15 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  cloud_firestore: ^4.16.1
+  firebase_auth: ^4.19.1
   flutter:
     sdk: flutter
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.6
-  font_awesome_flutter: ^10.7.0
-  fl_chart: ^0.66.2
-  intl: ^0.19.0
-  flutter_colorpicker: ^1.0.3
-  expense_repository:
-    path: package/expense_repository
-  firebase_core: ^2.29.0
-  bloc: ^8.1.4
-  flutter_bloc: ^8.1.5
-  equatable: ^2.0.5
+
 
 dev_dependencies:
   flutter_test:
