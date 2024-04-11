@@ -1,10 +1,14 @@
 import 'dart:math';
 
+import 'package:expense_repository/expense_repository.dart';
+import 'package:expense_tracker/screen/Expenses/bloc/create_category_bloc/create_category_bloc_bloc.dart';
+import 'package:expense_tracker/screen/Expenses/bloc/get_category_bloc/get_category_bloc_bloc.dart';
 import 'package:expense_tracker/screen/Expenses/view/expense_add.dart';
 import 'package:expense_tracker/screen/home/views/main_body.dart';
 import 'package:expense_tracker/screen/stats/view/stat_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -40,12 +44,12 @@ class _HomePageState extends State<HomePage> {
           unselectedIconTheme: const IconThemeData(color: Colors.black),
           items: [
             BottomNavigationBarItem(
-              icon:const Icon(CupertinoIcons.home),
+              icon: const Icon(CupertinoIcons.home),
               label: "Home",
               backgroundColor: index == 0 ? Colors.green : Colors.black,
             ),
             BottomNavigationBarItem(
-              icon:const Icon(CupertinoIcons.book),
+              icon: const Icon(CupertinoIcons.book),
               label: "stats",
               backgroundColor: index == 1 ? Colors.green : Colors.black,
             )
@@ -58,7 +62,22 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const AddExpenses(),
+              builder: (context) => MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (context) =>
+                        CreateCategoryBloc(FirebaseExpenseRepo()),
+                  ),
+                  BlocProvider(
+                    create: (context) =>
+                        GetCategoryBlocBloc(FirebaseExpenseRepo())
+                          ..add(
+                            GetCategory(),
+                          ),
+                  ),
+                ],
+                child: const AddExpenses(),
+              ),
             ),
           );
         },

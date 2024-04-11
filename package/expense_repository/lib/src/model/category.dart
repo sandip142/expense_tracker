@@ -4,11 +4,11 @@ import 'package:expense_repository/src/entity/category_entites.dart';
 /*This class represents the model for a category in your Flutter application. 
 It mirrors the structure of CategoryEntity but is tailored for use within your app*/
 class Category {
-  final String categoryId;
-  final String name;
-  final int totalExpenses;
-  final String icon;
-  final String color;
+   String categoryId;
+   String name;
+   int totalExpenses;
+   String icon;
+   int color;
 
   Category({
     required this.categoryId,
@@ -27,7 +27,7 @@ class Category {
     name: "",
     totalExpenses: 0,
     icon: '',
-    color: '',
+    color: 0,
   );
 
 

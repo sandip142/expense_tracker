@@ -1,6 +1,9 @@
+import 'package:expense_tracker/screen/Expenses/bloc/get_category_bloc/get_category_bloc_bloc.dart';
+import 'package:expense_tracker/screen/Expenses/view/category_creation.dart';
+import 'package:expense_tracker/screen/Expenses/view/conversion/icon_to_string.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
@@ -16,22 +19,16 @@ class _AddExpensesState extends State<AddExpenses> {
   TextEditingController categoryController = TextEditingController();
   TextEditingController dateController = TextEditingController();
 
-  List<IconData> expenseIcon = [
-    CupertinoIcons.train_style_one,
-    FontAwesomeIcons.burger,
-    FontAwesomeIcons.car,
-    FontAwesomeIcons.mobile,
-    FontAwesomeIcons.wallet
-  ];
-
-  IconData? iconChoose;
-
   DateTime selectedDate = DateTime.now();
   @override
   void initState() {
-    dateController.text = DateFormat('dd/MM/yyyy').format(DateTime.now());
+    dateController.text = DateFormat('dd/MM/yyyy').format(
+      DateTime.now(),
+    );
     super.initState();
   }
+
+  bool ShowListTille = false;
 
   @override
   Widget build(BuildContext context) {
@@ -89,253 +86,7 @@ class _AddExpensesState extends State<AddExpenses> {
                   setState(() {
                     FocusScope.of(context).unfocus();
                   });
-                  FocusScope.of(context).unfocus();
-                  showDialog(
-                      context: context,
-                      builder: (ctx) {
-                        //initailize here because we do not it ouside we need it inside the dialogbox
-                        Color categoryColor = Colors.white;
-                        bool showContainer = false;
-                        return StatefulBuilder(builder: (context, setState) {
-                          return AlertDialog(
-                            content: SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  TextField(
-                                    cursorWidth: 2,
-                                    onTap: () {},
-                                    decoration: InputDecoration(
-                                      fillColor: Colors.white,
-                                      filled: true,
-                                      hintText: "Name",
-                                      hintStyle: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.normal),
-                                      hoverColor: Colors.blue,
-                                      prefixIcon: Icon(
-                                        FontAwesomeIcons.magnet,
-                                        color: Colors.grey.shade700,
-                                      ),
-                                      border: const OutlineInputBorder(
-                                        borderSide: BorderSide.none,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(
-                                            20,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 15,
-                                  ),
-                                  TextField(
-                                    cursorWidth: 10,
-                                    readOnly: true,
-                                    showCursor: false,
-                                    decoration: InputDecoration(
-                                      fillColor: Colors.white,
-                                      filled: true,
-                                      hintText: "Icon",
-                                      hintStyle: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                      hoverColor: Colors.blue,
-                                      prefixIcon: Icon(
-                                        FontAwesomeIcons.icons,
-                                        color: Colors.grey.shade700,
-                                      ),
-                                      suffixIcon: IconButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            showContainer = !showContainer;
-                                            FocusScope.of(context).unfocus();
-                                          });
-                                        },
-                                        icon: const Icon(
-                                          CupertinoIcons.chevron_down,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide.none,
-                                        borderRadius: showContainer
-                                            ? const BorderRadius.vertical(
-                                                top: Radius.circular(
-                                                  12,
-                                                ),
-                                              )
-                                            : const BorderRadius.all(
-                                                Radius.circular(12),
-                                              ),
-                                      ),
-                                    ),
-                                  ),
-                                  showContainer
-                                      ? Container(
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          height: 150,
-                                          decoration: const BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.vertical(
-                                              bottom: Radius.circular(
-                                                12,
-                                              ),
-                                            ),
-                                          ),
-                                          child: GridView.builder(
-                                            gridDelegate:
-                                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                                    crossAxisCount: 3),
-                                            itemCount: expenseIcon.length,
-                                            itemBuilder: (context, index) {
-                                              return Padding(
-                                                padding:
-                                                    const EdgeInsets.all(4.0),
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    setState(
-                                                      () {
-                                                        iconChoose =
-                                                            expenseIcon[index];
-                                                      },
-                                                    );
-                                                  },
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      border: Border.all(
-                                                          color: iconChoose ==
-                                                                  expenseIcon[
-                                                                      index]
-                                                              ? Colors.green
-                                                              : Colors.black,
-                                                          width: 2),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
-                                                    ),
-                                                    child: Icon(
-                                                      expenseIcon[index],
-                                                      size: 40,
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        )
-                                      : Container(),
-                                  const SizedBox(
-                                    height: 15,
-                                  ),
-                                  TextField(
-                                    onTap: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (ctx2) {
-                                            return AlertDialog(
-                                              content: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  ColorPicker(
-                                                      pickerColor:
-                                                          categoryColor,
-                                                      onColorChanged: (value) {
-                                                        setState(() {
-                                                          categoryColor = value;
-                                                        });
-                                                      }),
-                                                  SizedBox(
-                                                    height: kToolbarHeight,
-                                                    width: double.infinity,
-                                                    child: TextButton(
-                                                      onPressed: () {
-                                                        print(categoryColor);
-                                                        Navigator.pop(ctx2);
-                                                      },
-                                                      style:
-                                                          TextButton.styleFrom(
-                                                        backgroundColor:
-                                                            Colors.black,
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(12),
-                                                        ),
-                                                      ),
-                                                      child: const Text(
-                                                        "Save",
-                                                        style: TextStyle(
-                                                          fontSize: 22,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          });
-                                    },
-                                    cursorWidth: 5,
-                                    showCursor: false,
-                                    readOnly: true,
-                                    decoration: InputDecoration(
-                                      fillColor: categoryColor,
-                                      filled: true,
-                                      hintText: "Color",
-                                      hintStyle: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.normal),
-                                      hoverColor: Colors.blue,
-                                      prefixIcon: Icon(
-                                        FontAwesomeIcons
-                                            .magnifyingGlassArrowRight,
-                                        color: Colors.grey.shade700,
-                                      ),
-                                      border: const OutlineInputBorder(
-                                        borderSide: BorderSide.none,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(
-                                            20,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  SizedBox(
-                                    height: kToolbarHeight,
-                                    width: double.infinity,
-                                    child: TextButton(
-                                      onPressed: () {},
-                                      style: TextButton.styleFrom(
-                                        backgroundColor: Colors.black,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        "Save",
-                                        style: TextStyle(
-                                          fontSize: 22,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        });
-                      });
+                  getCategoryCreation(context);
                 },
                 cursorWidth: 5,
                 readOnly: true,
@@ -359,19 +110,71 @@ class _AddExpensesState extends State<AddExpenses> {
                         FontAwesomeIcons.plus,
                         color: Colors.grey,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          ShowListTille = !ShowListTille;
+                        });
+                      },
                     ),
                   ),
-                  border: const OutlineInputBorder(
+                  border: OutlineInputBorder(
                     borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(
-                        20,
-                      ),
-                    ),
+                    borderRadius: ShowListTille
+                        ? const BorderRadius.vertical(
+                            top: Radius.circular(
+                              20,
+                            ),
+                          )
+                        : const BorderRadius.all(
+                            Radius.circular(20),
+                          ),
                   ),
                 ),
               ),
+              ShowListTille
+                  ? Container(
+                      height: 200,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.vertical(
+                          bottom: Radius.circular(20),
+                        ),
+                        color: Colors.white,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: BlocBuilder<GetCategoryBlocBloc,
+                            GetCategoryBlocState>(
+                          builder: (context, state) {
+                            if (state is GetCategoryBlocSuccess) {
+                              print(state.getCategories.length);
+                              return ListView.builder(
+                                  itemCount: state.getCategories.length,
+                              
+                                  itemBuilder: (context, index) {
+                                    IconData iconFire =stringToIconData(state.getCategories[index].icon);
+                                    return Card(
+                                      child: ListTile(
+                                        leading:
+                                             Icon(iconFire),
+                                        title:  Text(state.getCategories[index].name),
+                                        tileColor:Color(state.getCategories[index].color),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),),
+                                      ),
+                                    );
+                                  });
+                            } else {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    )
+                  : Container(),
               const SizedBox(
                 height: 20,
               ),

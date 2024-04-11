@@ -155,7 +155,7 @@ class MainBody extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(
-                        width: 80,
+                        width: 50,
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
